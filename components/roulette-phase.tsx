@@ -1,148 +1,261 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { cn } from "@/lib/utils"
+import { useState } from "react";
+import { cn } from "@/lib/utils";
+import { Gift, Cookie, Candy, Banknote } from "lucide-react"; // Ícones sugeridos
 
 interface RoulettePhaseProps {
-  onReset: () => void
+  onReset?: () => void;
+  onUnlockRequest?: () => void; // Quando clica para tentar liberar
+  isLocked?: boolean;
 }
 
+// Configuração dos Prêmios
 const prizes = [
-  { id: 1, label: "Prêmio A", icon: "🎁" },
-  { id: 2, label: "Tente Novamente", icon: "🔄" },
-  { id: 3, label: "Prêmio B", icon: "🏆" },
-  { id: 4, label: "Prêmio C", icon: "💎" },
-  { id: 5, label: "Tente Novamente", icon: "🔄" },
-  { id: 6, label: "Prêmio D", icon: "⭐" },
-  { id: 7, label: "Prêmio E", icon: "🎊" },
-  { id: 8, label: "Tente Novamente", icon: "🔄" },
-]
+  {
+    id: 1,
+    label: "R$ 300 PIX",
+    icon: Banknote,
+    color: "bg-green-600",
+    text: "text-white",
+    isGrandPrize: true,
+  },
+  {
+    id: 2,
+    label: "Chocolate",
+    icon: Cookie,
+    color: "bg-[#5D4037]",
+    text: "text-white",
+  }, // Marrom Chocolate
+  {
+    id: 3,
+    label: "Baganas",
+    icon: Candy,
+    color: "bg-[#FF4081]",
+    text: "text-white",
+  }, // Rosa chiclete
+  {
+    id: 4,
+    label: "Chocolate",
+    icon: Cookie,
+    color: "bg-[#5D4037]",
+    text: "text-white",
+  },
+  {
+    id: 5,
+    label: "Baganas",
+    icon: Candy,
+    color: "bg-[#FFCD40]",
+    text: "text-white",
+  }, // Amarelo
+  {
+    id: 6,
+    label: "Chocolate",
+    icon: Cookie,
+    color: "bg-[#5D4037]",
+    text: "text-white",
+  },
+  {
+    id: 7,
+    label: "Baganas",
+    icon: Candy,
+    color: "bg-[#FF4081]",
+    text: "text-white",
+  },
+  {
+    id: 8,
+    label: "Chocolate",
+    icon: Cookie,
+    color: "bg-[#5D4037]",
+    text: "text-white",
+  },
+];
 
-export function RoulettePhase({ onReset }: RoulettePhaseProps) {
-  const [isSpinning, setIsSpinning] = useState(false)
-  const [rotation, setRotation] = useState(0)
-  const [showPrize, setShowPrize] = useState(false)
-  const [wonPrize, setWonPrize] = useState<(typeof prizes)[0] | null>(null)
+export function RoulettePhase({
+  onReset,
+  onUnlockRequest,
+  isLocked = false,
+}: RoulettePhaseProps) {
+  const [isSpinning, setIsSpinning] = useState(false);
+  const [rotation, setRotation] = useState(0);
+  const [showPrize, setShowPrize] = useState(false);
+  const [wonPrize, setWonPrize] = useState<(typeof prizes)[0] | null>(null);
 
-  const handleSpin = () => {
-    if (isSpinning) return
+  const handleAction = () => {
+    // Se estiver bloqueada, pede para desbloquear (vai pro quiz)
+    if (isLocked) {
+      if (onUnlockRequest) onUnlockRequest();
+      return;
+    }
 
-    setIsSpinning(true)
-    setShowPrize(false)
+    // Se estiver liberada, gira!
+    if (isSpinning) return;
 
-    // Random number of full rotations (5-10) plus random final position
-    const spins = 5 + Math.random() * 5
-    const finalIndex = Math.floor(Math.random() * prizes.length)
-    const degreePerPrize = 360 / prizes.length
-    const finalRotation = spins * 360 + finalIndex * degreePerPrize
+    setIsSpinning(true);
+    setShowPrize(false);
 
-    setRotation(rotation + finalRotation)
+    // Sorteio viciado? Se quiser forçar algo, altere a lógica aqui.
+    // Por enquanto é aleatório.
+    const spins = 5;
+    const randomOffset = Math.floor(Math.random() * 360);
+    const newRotation = rotation + spins * 360 + randomOffset;
 
-    // Show prize after animation
+    setRotation(newRotation);
+
     setTimeout(() => {
-      setIsSpinning(false)
-      setWonPrize(prizes[finalIndex])
-      setShowPrize(true)
-    }, 4000)
-  }
+      setIsSpinning(false);
+      const actualDeg = newRotation % 360;
+      const sliceSize = 360 / prizes.length;
+      const winningIndex = Math.floor(
+        ((360 - actualDeg + 90) % 360) / sliceSize
+      );
+      setWonPrize(prizes[winningIndex] || prizes[0]);
+      setShowPrize(true);
+    }, 4000);
+  };
+
+  // Gera o gradiente dinâmico baseado nas cores dos prêmios
+  const conicGradient = `conic-gradient(${prizes
+    .map((p, i) => {
+      const start = (i / prizes.length) * 100;
+      const end = ((i + 1) / prizes.length) * 100;
+      // Mapeia classes tailwind para hex (simplificado para o exemplo funcionar visualmente sem CSS complexo)
+      // O ideal é usar valores HEX diretos no array prizes para garantir
+      let colorHex = p.color.includes("green")
+        ? "#16a34a"
+        : p.color.includes("#5D4037")
+        ? "#5D4037"
+        : p.color.includes("#FF4081")
+        ? "#FF4081"
+        : p.color.includes("#FFCD40")
+        ? "#FFCD40"
+        : "#ffffff";
+      return `${colorHex} ${start}% ${end}%`;
+    })
+    .join(", ")})`;
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center p-12">
-      {/* Title */}
-      <div className="mb-12">
-        <h1 className="text-7xl font-bold text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.3)]">ROLETA DA SORTE</h1>
+    <div className="flex min-h-screen flex-col items-center justify-center p-8 animate-in fade-in duration-700">
+      <div className="mb-8 text-center space-y-2">
+        <h1 className="text-7xl font-black text-white drop-shadow-lg uppercase tracking-wider italic">
+          Roleta Fusion
+        </h1>
+        <p className="text-2xl text-white/90 font-medium">
+          {isLocked
+            ? "Gire e tente sua sorte agora!"
+            : "Sorte liberada! Boa sorte!"}
+        </p>
       </div>
 
-      {/* Roulette Wheel */}
-      <div className="relative mb-16">
-        {/* Pointer */}
-        <div className="absolute left-1/2 top-0 z-20 -translate-x-1/2 -translate-y-1/2">
-          <div className="h-0 w-0 border-l-[30px] border-r-[30px] border-t-[50px] border-l-transparent border-r-transparent border-t-white drop-shadow-lg" />
+      <div className="relative mb-12 p-4 bg-white/20 rounded-full backdrop-blur-sm border-4 border-white/30 shadow-2xl">
+        {/* Ponteiro */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-6 z-20">
+          <div className="w-12 h-16 bg-red-600 rounded-b-full shadow-lg border-2 border-white flex items-center justify-center">
+            <div className="w-2 h-2 bg-white rounded-full mt-2"></div>
+          </div>
         </div>
 
-        {/* Wheel */}
+        {/* Roda */}
         <div
-          className="relative h-[500px] w-[500px] rounded-full border-8 border-white shadow-2xl"
+          className="relative w-[500px] h-[500px] rounded-full border-[8px] border-white shadow-[inset_0_0_20px_rgba(0,0,0,0.2)] overflow-hidden bg-slate-800"
           style={{
             transform: `rotate(${rotation}deg)`,
-            transition: isSpinning ? "transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99)" : "none",
+            transition: isSpinning
+              ? "transform 4s cubic-bezier(0.25, 0.1, 0.25, 1)"
+              : "none",
           }}
         >
-          {prizes.map((prize, index) => {
-            const degreePerPrize = 360 / prizes.length
-            const rotation = index * degreePerPrize
-            const isOrange = index % 2 === 0
+          {/* Fundo colorido */}
+          <div
+            className="absolute inset-0 w-full h-full"
+            style={{ background: conicGradient }}
+          />
+
+          {/* Ícones */}
+          {prizes.map((prize, i) => {
+            const angle = (360 / prizes.length) * i + 360 / prizes.length / 2;
+            const radius = 160;
+            const x = Math.sin((angle * Math.PI) / 180) * radius;
+            const y = -Math.cos((angle * Math.PI) / 180) * radius;
 
             return (
               <div
                 key={prize.id}
                 className={cn(
-                  "absolute left-1/2 top-1/2 h-1/2 w-1/2 origin-bottom-left",
-                  isOrange ? "bg-white" : "bg-[#FF6B00]",
+                  "absolute left-1/2 top-1/2 flex flex-col items-center justify-center font-bold text-center w-32",
+                  prize.text
                 )}
                 style={{
-                  transform: `rotate(${rotation}deg) skewY(${-90 + degreePerPrize}deg)`,
-                  clipPath: "polygon(0 0, 100% 0, 50% 100%)",
+                  marginLeft: "-4rem",
+                  marginTop: "-2rem",
+                  transform: `translate(${x}px, ${y}px) rotate(${angle}deg)`,
                 }}
               >
-                <div
-                  className="absolute left-1/4 top-1/4 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center"
-                  style={{
-                    transform: `rotate(${-rotation + degreePerPrize / 2}deg) skewY(${90 - degreePerPrize}deg)`,
-                  }}
-                >
-                  <span className="text-4xl">{prize.icon}</span>
-                  <span
-                    className={cn("whitespace-nowrap text-lg font-bold", isOrange ? "text-[#FF6B00]" : "text-white")}
-                  >
-                    {prize.label}
-                  </span>
-                </div>
+                <prize.icon
+                  className="w-10 h-10 mb-1 drop-shadow-md"
+                  strokeWidth={2.5}
+                />
+                <span className="text-sm uppercase leading-tight drop-shadow-sm">
+                  {prize.label}
+                </span>
               </div>
-            )
+            );
           })}
 
-          {/* Center circle */}
-          <div className="absolute left-1/2 top-1/2 h-20 w-20 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-white bg-[#FF6B00]" />
+          {/* Centro */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-white rounded-full border-4 border-[#FF6B00] shadow-lg flex items-center justify-center z-10">
+            <Gift className="w-10 h-10 text-[#FF6B00]" />
+          </div>
         </div>
       </div>
 
-      {/* Spin Button */}
       <button
-        onClick={handleSpin}
+        onClick={handleAction}
         disabled={isSpinning}
         autoFocus
         className={cn(
-          "rounded-3xl bg-white px-20 py-10 text-5xl font-bold text-[#FF6B00] transition-all",
-          "hover:scale-105 hover:shadow-2xl",
-          "focus-visible:scale-110 focus-visible:shadow-[0_0_0_6px_white,0_8px_24px_rgba(0,0,0,0.4)] focus-visible:outline-none",
-          isSpinning && "opacity-50",
+          "relative px-20 py-8 rounded-full font-black text-4xl shadow-[0_10px_0_rgb(0,0,0,0.2)] transition-all uppercase tracking-widest",
+          "hover:scale-105 hover:-translate-y-1",
+          "focus-visible:ring-8 focus-visible:ring-yellow-300 focus-visible:scale-110 focus-visible:outline-none",
+          isSpinning && "opacity-50 cursor-not-allowed",
+          isLocked
+            ? "bg-[#FF6B00] text-white hover:shadow-[0_15px_0_#cc5500]"
+            : "bg-green-500 text-white shadow-[0_10px_0_#15803d] hover:bg-green-400"
         )}
       >
-        {isSpinning ? "GIRANDO..." : "GIRAR ROLETA"}
+        {isSpinning ? "GIRANDO..." : isLocked ? "GIRAR AGORA" : "GIRAR ROLETA!"}
       </button>
 
-      {/* Prize Modal */}
+      {/* Modal */}
       {showPrize && wonPrize && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-12">
-          <div className="flex flex-col items-center gap-8 rounded-3xl bg-white p-16 shadow-2xl">
-            <h2 className="text-6xl font-bold text-[#FF6B00]">VOCÊ GANHOU!</h2>
-            <div className="text-8xl">{wonPrize.icon}</div>
-            <p className="text-5xl font-bold text-[#FF6B00]">{wonPrize.label}</p>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-300">
+          <div className="bg-white p-12 rounded-[2rem] max-w-2xl w-full flex flex-col items-center text-center shadow-2xl animate-in zoom-in-95 duration-300 border-8 border-[#FF6B00]">
+            <div
+              className={cn(
+                "w-32 h-32 rounded-full flex items-center justify-center mb-6 shadow-inner",
+                wonPrize.color
+              )}
+            >
+              <wonPrize.icon className="w-16 h-16 text-white" />
+            </div>
+
+            <h2 className="text-6xl font-black text-slate-800 mb-2 uppercase">
+              {wonPrize.label.includes("300") ? "PARABÉNS!!!" : "Você Ganhou!"}
+            </h2>
+            <p className="text-4xl font-bold text-gray-500 mb-8">
+              Prêmio: <span className="text-[#FF6B00]">{wonPrize.label}</span>
+            </p>
+
             <button
               onClick={onReset}
               autoFocus
-              className={cn(
-                "mt-4 rounded-3xl bg-[#FF6B00] px-16 py-8 text-4xl font-bold text-white transition-all",
-                "hover:scale-105 hover:shadow-2xl",
-                "focus-visible:scale-110 focus-visible:shadow-[0_0_0_6px_#FF6B00,0_8px_24px_rgba(0,0,0,0.4)] focus-visible:outline-none",
-              )}
+              className="w-full bg-[#FF6B00] text-white text-3xl font-bold py-6 rounded-xl hover:bg-[#e56000] focus-visible:ring-8 focus-visible:ring-yellow-400 focus-visible:outline-none transition-all shadow-[0_8px_0_#cc5500] active:translate-y-2 active:shadow-none"
             >
-              OK
+              RESGATAR
             </button>
           </div>
         </div>
       )}
     </div>
-  )
+  );
 }

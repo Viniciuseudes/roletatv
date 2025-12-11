@@ -1,81 +1,105 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { cn } from "@/lib/utils"
+import { useState } from "react";
+import { cn } from "@/lib/utils";
+import { ChevronRight } from "lucide-react";
 
 interface QuizPhaseProps {
-  onComplete: () => void
+  onComplete: () => void;
 }
 
 const questions = [
   {
-    question: "Qual é a sua faixa etária?",
-    answers: ["18 a 25 anos", "25 a 35 anos", "35 a 50 anos", "Acima de 50 anos"],
-    correct: 0,
+    question: "Qual sua faixa etária?",
+    answers: ["18 - 25 anos", "26 - 35 anos", "36 - 50 anos", "50+ anos"],
   },
   {
-    question: "Qual é o seu gênero?",
-    answers: ["Masculino", "Feminino", "Não-binário", "Prefiro não responder"],
-    correct: 0,
+    question: "Qual seu gênero?",
+    answers: ["Masculino", "Feminino", "Outro", "Prefiro não dizer"],
   },
   {
-    question: "Para qual atendimento veio?",
-    answers: ["Psicologia", "Nutrição", "Fisioterapia", "Outro"],
-    correct: 0,
+    question: "Qual especialidade busca?",
+    answers: ["Psicologia", "Nutrição", "Fisioterapia", "Odontologia"],
   },
   {
-    question: "Usa plano de saúde?",
-    answers: ["Sim", "Não", "", ""],
-    correct: 0,
+    question: "Possui convênio médico?",
+    answers: [
+      "Sim, possuo",
+      "Não, particular",
+      "Quero saber valores",
+      "Tenho encaminhamento",
+    ],
   },
-]
+];
 
 export function QuizPhase({ onComplete }: QuizPhaseProps) {
-  const [currentQuestion, setCurrentQuestion] = useState(0)
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [isExiting, setIsExiting] = useState(false); // Para animação de saída
 
   const handleAnswer = () => {
-    if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1)
-    } else {
-      // Quiz completed
-      setTimeout(onComplete, 500)
-    }
-  }
+    // Inicia animação de saída
+    setIsExiting(true);
 
-  const current = questions[currentQuestion]
+    setTimeout(() => {
+      if (currentQuestion < questions.length - 1) {
+        setCurrentQuestion(currentQuestion + 1);
+        setIsExiting(false); // Reseta para próxima pergunta entrar
+      } else {
+        onComplete();
+      }
+    }, 300); // Tempo da animação
+  };
+
+  const current = questions[currentQuestion];
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center p-12">
-      {/* Progress Indicator */}
-      <div className="absolute right-12 top-12">
-        <div className="rounded-2xl bg-white px-8 py-4">
-          <p className="text-4xl font-bold text-[#FF6B00]">
-            PERGUNTA {currentQuestion + 1} / {questions.length}
-          </p>
+    <div className="flex min-h-screen flex-col items-center justify-center p-12 max-w-6xl mx-auto">
+      {/* Barra de Progresso Visual */}
+      <div className="w-full max-w-3xl h-4 bg-black/20 rounded-full mb-12 overflow-hidden">
+        <div
+          className="h-full bg-white transition-all duration-500 ease-out"
+          style={{
+            width: `${((currentQuestion + 1) / questions.length) * 100}%`,
+          }}
+        />
+      </div>
+
+      <div
+        key={currentQuestion}
+        className={cn(
+          "w-full flex flex-col items-center transition-all duration-300",
+          isExiting
+            ? "opacity-0 -translate-x-10"
+            : "opacity-100 translate-x-0 animate-in slide-in-from-right-10 fade-in"
+        )}
+      >
+        {/* Pergunta */}
+        <h1 className="text-5xl md:text-6xl font-black text-white text-center mb-16 drop-shadow-md leading-tight">
+          {current.question}
+        </h1>
+
+        {/* Grid de Respostas */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+          {current.answers.map((answer, index) => (
+            <button
+              key={index}
+              onClick={handleAnswer}
+              className={cn(
+                "group relative flex items-center justify-between px-10 py-8 bg-white rounded-3xl text-left transition-all duration-200",
+                "shadow-[0_8px_0_rgba(0,0,0,0.1)]", // Sombra estilo "botão físico"
+                "hover:scale-[1.02] hover:shadow-[0_12px_0_rgba(0,0,0,0.15)]",
+                "active:scale-[0.98] active:translate-y-2 active:shadow-none",
+                "focus-visible:ring-8 focus-visible:ring-yellow-300 focus-visible:z-10 focus-visible:scale-105 focus-visible:outline-none" // Foco TV
+              )}
+            >
+              <span className="text-3xl font-bold text-slate-800 group-hover:text-[#FF6B00] transition-colors">
+                {answer}
+              </span>
+              <ChevronRight className="w-8 h-8 text-slate-300 group-hover:text-[#FF6B00] opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-all" />
+            </button>
+          ))}
         </div>
       </div>
-
-      {/* Question */}
-      <div className="mb-16 max-w-5xl text-center">
-        <h1 className="text-6xl font-bold text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.3)]">{current.question}</h1>
-      </div>
-
-      {/* Answers */}
-      <div className="flex w-full max-w-4xl flex-col gap-6">
-        {current.answers.map((answer, index) => (
-          <button
-            key={index}
-            onClick={handleAnswer}
-            className={cn(
-              "rounded-3xl bg-white px-12 py-8 text-4xl font-bold text-[#FF6B00] transition-all",
-              "hover:scale-105 hover:shadow-2xl",
-              "focus-visible:scale-110 focus-visible:shadow-[0_0_0_6px_white,0_8px_24px_rgba(0,0,0,0.4)] focus-visible:outline-none",
-            )}
-          >
-            {answer}
-          </button>
-        ))}
-      </div>
     </div>
-  )
+  );
 }
