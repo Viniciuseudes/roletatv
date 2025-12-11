@@ -294,9 +294,9 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
-// CORES DAS FATIAS (Laranja Vibrante vs Branco Suave)
-const SLICE_COLOR_1 = "#FF6B00";
-const SLICE_COLOR_2 = "#FFF3E0";
+// CORES DAS FATIAS
+const SLICE_COLOR_1 = "#FF6B00"; // Laranja Vibrante
+const SLICE_COLOR_2 = "#FFF3E0"; // Branco/Laranja Claro
 const prizes = [
     {
         id: 1,
@@ -355,8 +355,7 @@ function RoulettePhase({ onReset, onUnlockRequest, isLocked = false }) {
         setIsSpinning(true);
         setShowPrize(false);
         (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$sounds$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["playSound"])("spin");
-        // Lógica do Sorteio
-        const spins = 5; // Voltas completas
+        const spins = 5;
         const randomOffset = Math.floor(Math.random() * 360);
         const newRotation = rotation + spins * 360 + randomOffset;
         setRotation(newRotation);
@@ -365,7 +364,6 @@ function RoulettePhase({ onReset, onUnlockRequest, isLocked = false }) {
             (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$sounds$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["stopSpinSound"])();
             const actualDeg = newRotation % 360;
             const sliceSize = 360 / prizes.length;
-            // Cálculo do índice vencedor considerando o ponteiro no topo
             const winningIndex = Math.floor((360 - actualDeg + 90) % 360 / sliceSize);
             const winner = prizes[winningIndex] || prizes[0];
             setWonPrize(winner);
@@ -373,7 +371,6 @@ function RoulettePhase({ onReset, onUnlockRequest, isLocked = false }) {
             (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$sounds$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["playSound"])("win");
         }, 4000);
     };
-    // Gradiente Cônico para desenhar as fatias
     const conicGradient = `conic-gradient(${prizes.map((_, i)=>{
         const start = i / prizes.length * 100;
         const end = (i + 1) / prizes.length * 100;
@@ -384,56 +381,56 @@ function RoulettePhase({ onReset, onUnlockRequest, isLocked = false }) {
         className: "flex min-h-screen flex-col items-center justify-center p-8 animate-in fade-in duration-700",
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "mb-10 text-center space-y-2",
+                className: "mb-10 text-center space-y-4 bg-white/90 p-8 rounded-[3rem] shadow-xl border-4 border-[#FF6B00]/30 backdrop-blur-md max-w-4xl",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
-                        className: "text-7xl font-black text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)] uppercase tracking-wider italic",
+                        className: "text-7xl font-black text-[#FF6B00] uppercase tracking-wider italic drop-shadow-sm leading-none",
                         children: "Roleta Fusion"
                     }, void 0, false, {
                         fileName: "[project]/components/roulette-phase.tsx",
-                        lineNumber: 91,
+                        lineNumber: 89,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                        className: "text-3xl text-white font-bold drop-shadow-md",
-                        children: isLocked ? "Gire e tente sua sorte agora!" : "Sorte liberada! Boa sorte!"
+                        className: "text-4xl text-[#431407] font-bold leading-tight",
+                        children: isLocked ? "Gire para tentar liberar o prêmio!" : "Sorte liberada! Valendo!"
                     }, void 0, false, {
                         fileName: "[project]/components/roulette-phase.tsx",
-                        lineNumber: 94,
+                        lineNumber: 92,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/roulette-phase.tsx",
-                lineNumber: 90,
+                lineNumber: 88,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "relative mb-12 p-3 rounded-full shadow-[0_20px_50px_rgba(255,107,0,0.5)] bg-gradient-to-b from-orange-300 to-orange-600 border-4 border-orange-200",
+                className: "relative mb-14 p-3 rounded-full shadow-[0_30px_60px_rgba(255,107,0,0.6)] bg-gradient-to-b from-orange-400 to-orange-700 border-8 border-orange-300",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "absolute top-0 left-1/2 -translate-x-1/2 -translate-y-8 z-20 filter drop-shadow-lg",
+                        className: "absolute top-0 left-1/2 -translate-x-1/2 -translate-y-10 z-20 filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)]",
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "w-14 h-20 bg-gradient-to-b from-white to-orange-100 rounded-b-full border-4 border-orange-500 flex items-center justify-center",
+                            className: "w-16 h-24 bg-gradient-to-b from-white via-orange-100 to-orange-200 rounded-b-full border-[6px] border-[#FF6B00] flex items-center justify-center",
                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "w-3 h-3 bg-orange-600 rounded-full mt-4"
+                                className: "w-4 h-4 bg-[#FF6B00] rounded-full mt-6 shadow-inner"
                             }, void 0, false, {
                                 fileName: "[project]/components/roulette-phase.tsx",
-                                lineNumber: 106,
+                                lineNumber: 104,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/roulette-phase.tsx",
-                            lineNumber: 105,
+                            lineNumber: 103,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/roulette-phase.tsx",
-                        lineNumber: 104,
+                        lineNumber: 102,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "relative w-[520px] h-[520px] rounded-full border-[10px] border-orange-500 shadow-[inset_0_0_30px_rgba(0,0,0,0.2)] overflow-hidden",
+                        className: "relative w-[550px] h-[550px] rounded-full border-[12px] border-[#FF6B00] shadow-[inset_0_0_40px_rgba(0,0,0,0.3)] overflow-hidden bg-white",
                         style: {
                             transform: `rotate(${rotation}deg)`,
                             transition: isSpinning ? "transform 4s cubic-bezier(0.25, 0.1, 0.25, 1)" : "none"
@@ -446,137 +443,142 @@ function RoulettePhase({ onReset, onUnlockRequest, isLocked = false }) {
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/components/roulette-phase.tsx",
-                                lineNumber: 121,
+                                lineNumber: 118,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full border-4 border-white shadow-xl flex items-center justify-center z-10",
+                                className: "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-28 bg-gradient-to-br from-[#FF6B00] to-orange-600 rounded-full border-[6px] border-white shadow-[0_10px_20px_rgba(0,0,0,0.3)] flex items-center justify-center z-10",
                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$star$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Star$3e$__["Star"], {
-                                    className: "w-12 h-12 text-white fill-white"
+                                    className: "w-14 h-14 text-white fill-white drop-shadow-md"
                                 }, void 0, false, {
                                     fileName: "[project]/components/roulette-phase.tsx",
-                                    lineNumber: 128,
+                                    lineNumber: 125,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/roulette-phase.tsx",
-                                lineNumber: 127,
+                                lineNumber: 124,
                                 columnNumber: 11
                             }, this),
                             prizes.map((prize, i)=>{
                                 const angle = 360 / prizes.length * i + 360 / prizes.length / 2;
-                                const radius = 170;
+                                const radius = 180;
                                 const x = Math.sin(angle * Math.PI / 180) * radius;
                                 const y = -Math.cos(angle * Math.PI / 180) * radius;
-                                // Ajuste de contraste do texto baseado na cor da fatia
-                                const isDarkSlice = i % 2 !== 0; // Fatias ímpares são laranjas escuras
+                                const isDarkSlice = i % 2 !== 0;
                                 const textColor = isDarkSlice ? "text-white" : "text-[#431407]";
                                 return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("absolute left-1/2 top-1/2 flex flex-col items-center justify-center font-bold text-center w-36", textColor),
+                                    className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("absolute left-1/2 top-1/2 flex flex-col items-center justify-center font-bold text-center w-40", textColor),
                                     style: {
-                                        marginLeft: "-4.5rem",
-                                        marginTop: "-2.5rem",
+                                        marginLeft: "-5rem",
+                                        marginTop: "-3rem",
                                         transform: `translate(${x}px, ${y}px) rotate(${angle}deg)`
                                     },
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(prize.icon, {
-                                            className: "w-12 h-12 mb-1 drop-shadow-sm",
+                                            className: "w-14 h-14 mb-2 drop-shadow-sm",
                                             strokeWidth: 2.5
                                         }, void 0, false, {
                                             fileName: "[project]/components/roulette-phase.tsx",
-                                            lineNumber: 155,
+                                            lineNumber: 151,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                            className: "text-lg uppercase leading-none font-black drop-shadow-sm tracking-tight",
+                                            className: "text-xl uppercase leading-none font-black drop-shadow-sm tracking-tight",
                                             children: prize.label
                                         }, void 0, false, {
                                             fileName: "[project]/components/roulette-phase.tsx",
-                                            lineNumber: 159,
+                                            lineNumber: 155,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, prize.id, true, {
                                     fileName: "[project]/components/roulette-phase.tsx",
-                                    lineNumber: 143,
+                                    lineNumber: 139,
                                     columnNumber: 15
                                 }, this);
                             })
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/roulette-phase.tsx",
-                        lineNumber: 111,
+                        lineNumber: 109,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/roulette-phase.tsx",
-                lineNumber: 102,
+                lineNumber: 100,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                 onClick: handleAction,
                 disabled: isSpinning,
                 autoFocus: true,
-                className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("relative px-16 py-8 rounded-full font-black text-4xl uppercase tracking-widest transition-all", "border-[6px] border-transparent", "hover:scale-105 hover:-translate-y-1", // Foco TV: Borda Amarela Brilhante
-                "focus-visible:scale-110 focus-visible:border-yellow-400 focus-visible:outline-none focus-visible:shadow-[0_0_40px_rgba(255,255,0,0.6)]", isSpinning ? "bg-gray-400 text-gray-200 cursor-not-allowed opacity-50" : isLocked ? "bg-white text-[#FF6B00] shadow-[0_10px_0_#e5e5e5]" : "bg-green-600 text-white shadow-[0_10px_0_#14532d]"),
+                className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("relative px-24 py-12 rounded-full font-black text-5xl uppercase tracking-widest transition-all", // Estilo Base: Branco, Texto Laranja, Borda Grossa Laranja, Sombra Escura
+                "bg-white text-[#FF6B00] border-[10px] border-[#FF6B00] shadow-[0_15px_0_#c2410c]", // Hover e Active (Clique)
+                "hover:scale-105 hover:-translate-y-2 hover:shadow-[0_20px_0_#c2410c] hover:bg-orange-50", "active:translate-y-4 active:shadow-none active:scale-95", // Foco TV: Borda Amarela Brilhante Externa
+                "focus-visible:scale-110 focus-visible:ring-[12px] focus-visible:ring-yellow-400 focus-visible:outline-none focus-visible:shadow-[0_0_50px_rgba(255,255,0,0.8)] focus-visible:z-30", isSpinning && "bg-gray-300 text-gray-500 border-gray-400 shadow-none cursor-not-allowed opacity-80 translate-y-4 scale-95"),
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                     className: "drop-shadow-sm",
-                    children: isSpinning ? "GIRANDO..." : isLocked ? "GIRAR AGORA" : "GIRAR ROLETA!"
+                    children: isSpinning ? "GIRANDO..." : isLocked ? "GIRAR AGORA" : "GIRAR! ($)"
                 }, void 0, false, {
                     fileName: "[project]/components/roulette-phase.tsx",
-                    lineNumber: 189,
+                    lineNumber: 185,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/roulette-phase.tsx",
-                lineNumber: 169,
+                lineNumber: 165,
                 columnNumber: 7
             }, this),
             showPrize && wonPrize && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-300",
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "bg-white p-12 rounded-[3rem] max-w-3xl w-full flex flex-col items-center text-center shadow-2xl animate-in zoom-in-95 duration-300 border-[12px] border-[#FF6B00]",
+                    className: "bg-white p-12 rounded-[4rem] max-w-3xl w-full flex flex-col items-center text-center shadow-2xl animate-in zoom-in-95 duration-300 border-[16px] border-[#FF6B00]",
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "w-40 h-40 rounded-full flex items-center justify-center mb-8 shadow-xl bg-gradient-to-br from-[#FF6B00] to-orange-500 animate-bounce",
+                            className: "w-48 h-48 rounded-full flex items-center justify-center mb-10 shadow-[0_20px_40px_rgba(255,107,0,0.4)] bg-gradient-to-br from-[#FF6B00] to-orange-600 animate-bounce",
                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(wonPrize.icon, {
-                                className: "w-20 h-20 text-white"
+                                className: "w-24 h-24 text-white"
                             }, void 0, false, {
                                 fileName: "[project]/components/roulette-phase.tsx",
-                                lineNumber: 203,
+                                lineNumber: 195,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/roulette-phase.tsx",
-                            lineNumber: 202,
+                            lineNumber: 194,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                            className: "text-7xl font-black text-[#431407] mb-4 uppercase leading-none",
-                            children: wonPrize.label.includes("300") ? "PARABÉNS!!!" : "Você Ganhou!"
+                            className: "text-8xl font-black text-[#431407] mb-6 uppercase leading-none tracking-tight",
+                            children: wonPrize.label.includes("300") ? "UAU! PIX!" : "Parabéns!"
                         }, void 0, false, {
                             fileName: "[project]/components/roulette-phase.tsx",
-                            lineNumber: 206,
+                            lineNumber: 198,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                            className: "text-5xl font-bold text-gray-500 mb-12",
+                            className: "text-6xl font-bold text-gray-500 mb-14 leading-tight",
                             children: [
-                                "Prêmio:",
-                                " ",
+                                "Você ganhou: ",
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
+                                    fileName: "[project]/components/roulette-phase.tsx",
+                                    lineNumber: 202,
+                                    columnNumber: 28
+                                }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                    className: "text-[#FF6B00] font-black",
+                                    className: "text-[#FF6B00] font-black text-7xl",
                                     children: wonPrize.label
                                 }, void 0, false, {
                                     fileName: "[project]/components/roulette-phase.tsx",
-                                    lineNumber: 211,
+                                    lineNumber: 203,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/roulette-phase.tsx",
-                            lineNumber: 209,
+                            lineNumber: 201,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -585,28 +587,28 @@ function RoulettePhase({ onReset, onUnlockRequest, isLocked = false }) {
                                 if (onReset) onReset();
                             },
                             autoFocus: true,
-                            className: "w-full bg-gradient-to-r from-[#FF6B00] to-orange-500 text-white text-4xl font-black py-8 rounded-2xl hover:from-orange-600 hover:to-orange-700 focus-visible:ring-[10px] focus-visible:ring-orange-300 focus-visible:outline-none transition-all shadow-[0_10px_0_#c2410c] active:translate-y-2 active:shadow-none uppercase",
-                            children: "RESGATAR PRÊMIO"
+                            className: "w-full bg-gradient-to-r from-[#FF6B00] to-orange-600 text-white text-5xl font-black py-10 rounded-3xl hover:from-orange-500 hover:to-orange-700 focus-visible:ring-[12px] focus-visible:ring-yellow-400 focus-visible:outline-none transition-all shadow-[0_12px_0_#9a3412] active:translate-y-4 active:shadow-none uppercase tracking-wider",
+                            children: "RESGATAR AGORA"
                         }, void 0, false, {
                             fileName: "[project]/components/roulette-phase.tsx",
-                            lineNumber: 216,
+                            lineNumber: 208,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/roulette-phase.tsx",
-                    lineNumber: 201,
+                    lineNumber: 193,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/roulette-phase.tsx",
-                lineNumber: 200,
+                lineNumber: 192,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/roulette-phase.tsx",
-        lineNumber: 89,
+        lineNumber: 86,
         columnNumber: 5
     }, this);
 }
