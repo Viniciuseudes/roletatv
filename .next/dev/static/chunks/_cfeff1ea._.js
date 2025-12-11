@@ -286,7 +286,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$candy$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Candy$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/candy.js [app-client] (ecmascript) <export default as Candy>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$banknote$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Banknote$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/banknote.js [app-client] (ecmascript) <export default as Banknote>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$star$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Star$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/star.js [app-client] (ecmascript) <export default as Star>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$sounds$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/sounds.ts [app-client] (ecmascript)"); // Importa os sons
+var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$sounds$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/sounds.ts [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
 "use client";
@@ -294,10 +294,9 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
-// Configuração dos Prêmios com PALETA LARANJA
-// Usamos apenas duas cores de fundo para as fatias para um visual "listrado" elegante.
-const SLICE_COLOR_1 = "#FF6B00"; // Laranja Vibrante (Texto Branco)
-const SLICE_COLOR_2 = "#FFF3E0"; // Laranja Muito Claro/Branco (Texto Laranja Escuro)
+// CORES DAS FATIAS (Laranja Vibrante vs Branco Suave)
+const SLICE_COLOR_1 = "#FF6B00";
+const SLICE_COLOR_2 = "#FFF3E0";
 const prizes = [
     {
         id: 1,
@@ -347,7 +346,7 @@ function RoulettePhase({ onReset, onUnlockRequest, isLocked = false }) {
     const [showPrize, setShowPrize] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [wonPrize, setWonPrize] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const handleAction = ()=>{
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$sounds$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["playSound"])("click"); // Som de clique no botão
+        (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$sounds$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["playSound"])("click");
         if (isLocked) {
             if (onUnlockRequest) onUnlockRequest();
             return;
@@ -355,28 +354,29 @@ function RoulettePhase({ onReset, onUnlockRequest, isLocked = false }) {
         if (isSpinning) return;
         setIsSpinning(true);
         setShowPrize(false);
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$sounds$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["playSound"])("spin"); // Toca som de giro contínuo
-        const spins = 5;
+        (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$sounds$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["playSound"])("spin");
+        // Lógica do Sorteio
+        const spins = 5; // Voltas completas
         const randomOffset = Math.floor(Math.random() * 360);
         const newRotation = rotation + spins * 360 + randomOffset;
         setRotation(newRotation);
         setTimeout(()=>{
             setIsSpinning(false);
-            (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$sounds$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["stopSpinSound"])(); // Para o som de giro
+            (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$sounds$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["stopSpinSound"])();
             const actualDeg = newRotation % 360;
             const sliceSize = 360 / prizes.length;
+            // Cálculo do índice vencedor considerando o ponteiro no topo
             const winningIndex = Math.floor((360 - actualDeg + 90) % 360 / sliceSize);
             const winner = prizes[winningIndex] || prizes[0];
             setWonPrize(winner);
             setShowPrize(true);
-            (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$sounds$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["playSound"])("win"); // Toca som de vitória
-        }, 4000); // Duração do giro
+            (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$sounds$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["playSound"])("win");
+        }, 4000);
     };
-    // Gerador de Conic Gradient Monocromático
+    // Gradiente Cônico para desenhar as fatias
     const conicGradient = `conic-gradient(${prizes.map((_, i)=>{
         const start = i / prizes.length * 100;
         const end = (i + 1) / prizes.length * 100;
-        // Alterna entre as duas cores da paleta laranja
         const color = i % 2 === 0 ? SLICE_COLOR_2 : SLICE_COLOR_1;
         return `${color} ${start}% ${end}%`;
     }).join(", ")})`;
@@ -391,7 +391,7 @@ function RoulettePhase({ onReset, onUnlockRequest, isLocked = false }) {
                         children: "Roleta Fusion"
                     }, void 0, false, {
                         fileName: "[project]/components/roulette-phase.tsx",
-                        lineNumber: 92,
+                        lineNumber: 91,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -399,7 +399,7 @@ function RoulettePhase({ onReset, onUnlockRequest, isLocked = false }) {
                         children: isLocked ? "Gire e tente sua sorte agora!" : "Sorte liberada! Boa sorte!"
                     }, void 0, false, {
                         fileName: "[project]/components/roulette-phase.tsx",
-                        lineNumber: 95,
+                        lineNumber: 94,
                         columnNumber: 9
                     }, this)
                 ]
@@ -419,17 +419,17 @@ function RoulettePhase({ onReset, onUnlockRequest, isLocked = false }) {
                                 className: "w-3 h-3 bg-orange-600 rounded-full mt-4"
                             }, void 0, false, {
                                 fileName: "[project]/components/roulette-phase.tsx",
-                                lineNumber: 107,
+                                lineNumber: 106,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/roulette-phase.tsx",
-                            lineNumber: 106,
+                            lineNumber: 105,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/roulette-phase.tsx",
-                        lineNumber: 105,
+                        lineNumber: 104,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -446,7 +446,7 @@ function RoulettePhase({ onReset, onUnlockRequest, isLocked = false }) {
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/components/roulette-phase.tsx",
-                                lineNumber: 122,
+                                lineNumber: 121,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -455,12 +455,12 @@ function RoulettePhase({ onReset, onUnlockRequest, isLocked = false }) {
                                     className: "w-12 h-12 text-white fill-white"
                                 }, void 0, false, {
                                     fileName: "[project]/components/roulette-phase.tsx",
-                                    lineNumber: 129,
+                                    lineNumber: 128,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/roulette-phase.tsx",
-                                lineNumber: 128,
+                                lineNumber: 127,
                                 columnNumber: 11
                             }, this),
                             prizes.map((prize, i)=>{
@@ -468,9 +468,9 @@ function RoulettePhase({ onReset, onUnlockRequest, isLocked = false }) {
                                 const radius = 170;
                                 const x = Math.sin(angle * Math.PI / 180) * radius;
                                 const y = -Math.cos(angle * Math.PI / 180) * radius;
-                                // Lógica de Cor Inversa para Contraste
+                                // Ajuste de contraste do texto baseado na cor da fatia
                                 const isDarkSlice = i % 2 !== 0; // Fatias ímpares são laranjas escuras
-                                const textColor = isDarkSlice ? "text-white" : "text-[#431407]"; // Branco no escuro, Marrom no claro
+                                const textColor = isDarkSlice ? "text-white" : "text-[#431407]";
                                 return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("absolute left-1/2 top-1/2 flex flex-col items-center justify-center font-bold text-center w-36", textColor),
                                     style: {
@@ -484,7 +484,7 @@ function RoulettePhase({ onReset, onUnlockRequest, isLocked = false }) {
                                             strokeWidth: 2.5
                                         }, void 0, false, {
                                             fileName: "[project]/components/roulette-phase.tsx",
-                                            lineNumber: 157,
+                                            lineNumber: 155,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -492,37 +492,45 @@ function RoulettePhase({ onReset, onUnlockRequest, isLocked = false }) {
                                             children: prize.label
                                         }, void 0, false, {
                                             fileName: "[project]/components/roulette-phase.tsx",
-                                            lineNumber: 161,
+                                            lineNumber: 159,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, prize.id, true, {
                                     fileName: "[project]/components/roulette-phase.tsx",
-                                    lineNumber: 144,
+                                    lineNumber: 143,
                                     columnNumber: 15
                                 }, this);
                             })
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/roulette-phase.tsx",
-                        lineNumber: 112,
+                        lineNumber: 111,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/roulette-phase.tsx",
-                lineNumber: 103,
+                lineNumber: 102,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                 onClick: handleAction,
                 disabled: isSpinning,
                 autoFocus: true,
-                className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("relative px-24 py-10 rounded-full font-black text-5xl shadow-[0_12px_0_rgb(0,0,0,0.3)] transition-all uppercase tracking-widest border-4 border-white/50", "hover:scale-105 hover:-translate-y-1", "focus-visible:ring-[10px] focus-visible:ring-white focus-visible:scale-110 focus-visible:outline-none", isSpinning && "opacity-70 cursor-not-allowed scale-95 shadow-none translate-y-2", isLocked ? "bg-gradient-to-r from-[#FF6B00] to-orange-500 text-white hover:shadow-[0_15px_0_#cc5500]" : "bg-gradient-to-r from-green-500 to-green-600 text-white shadow-[0_12px_0_#15803d]"),
-                children: isSpinning ? "GIRANDO..." : isLocked ? "GIRAR AGORA" : "GIRAR ROLETA!"
+                className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("relative px-16 py-8 rounded-full font-black text-4xl uppercase tracking-widest transition-all", "border-[6px] border-transparent", "hover:scale-105 hover:-translate-y-1", // Foco TV: Borda Amarela Brilhante
+                "focus-visible:scale-110 focus-visible:border-yellow-400 focus-visible:outline-none focus-visible:shadow-[0_0_40px_rgba(255,255,0,0.6)]", isSpinning ? "bg-gray-400 text-gray-200 cursor-not-allowed opacity-50" : isLocked ? "bg-white text-[#FF6B00] shadow-[0_10px_0_#e5e5e5]" : "bg-green-600 text-white shadow-[0_10px_0_#14532d]"),
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                    className: "drop-shadow-sm",
+                    children: isSpinning ? "GIRANDO..." : isLocked ? "GIRAR AGORA" : "GIRAR ROLETA!"
+                }, void 0, false, {
+                    fileName: "[project]/components/roulette-phase.tsx",
+                    lineNumber: 189,
+                    columnNumber: 9
+                }, this)
             }, void 0, false, {
                 fileName: "[project]/components/roulette-phase.tsx",
-                lineNumber: 170,
+                lineNumber: 169,
                 columnNumber: 7
             }, this),
             showPrize && wonPrize && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -536,12 +544,12 @@ function RoulettePhase({ onReset, onUnlockRequest, isLocked = false }) {
                                 className: "w-20 h-20 text-white"
                             }, void 0, false, {
                                 fileName: "[project]/components/roulette-phase.tsx",
-                                lineNumber: 195,
+                                lineNumber: 203,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/roulette-phase.tsx",
-                            lineNumber: 194,
+                            lineNumber: 202,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -549,7 +557,7 @@ function RoulettePhase({ onReset, onUnlockRequest, isLocked = false }) {
                             children: wonPrize.label.includes("300") ? "PARABÉNS!!!" : "Você Ganhou!"
                         }, void 0, false, {
                             fileName: "[project]/components/roulette-phase.tsx",
-                            lineNumber: 198,
+                            lineNumber: 206,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -562,13 +570,13 @@ function RoulettePhase({ onReset, onUnlockRequest, isLocked = false }) {
                                     children: wonPrize.label
                                 }, void 0, false, {
                                     fileName: "[project]/components/roulette-phase.tsx",
-                                    lineNumber: 203,
+                                    lineNumber: 211,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/roulette-phase.tsx",
-                            lineNumber: 201,
+                            lineNumber: 209,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -581,18 +589,18 @@ function RoulettePhase({ onReset, onUnlockRequest, isLocked = false }) {
                             children: "RESGATAR PRÊMIO"
                         }, void 0, false, {
                             fileName: "[project]/components/roulette-phase.tsx",
-                            lineNumber: 208,
+                            lineNumber: 216,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/roulette-phase.tsx",
-                    lineNumber: 193,
+                    lineNumber: 201,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/roulette-phase.tsx",
-                lineNumber: 192,
+                lineNumber: 200,
                 columnNumber: 9
             }, this)
         ]
@@ -633,20 +641,55 @@ var _s = __turbopack_context__.k.signature();
 function PhoneInput({ onComplete }) {
     _s();
     const [phone, setPhone] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
-    const handlePress = (key)=>{
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$sounds$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["playSound"])("click"); // Som ao digitar
-        if (key === "backspace") {
-            setPhone((prev)=>prev.slice(0, -1));
-        } else if (key === "confirm") {
-            if (phone.length >= 10) {
-                onComplete(phone);
-            }
-        } else {
-            if (phone.length < 11) {
-                setPhone((prev)=>prev + key);
+    // Função centralizada de processar inputs
+    const processInput = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "PhoneInput.useCallback[processInput]": (key)=>{
+            (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$sounds$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["playSound"])("click");
+            if (key === "backspace") {
+                setPhone({
+                    "PhoneInput.useCallback[processInput]": (prev)=>prev.slice(0, -1)
+                }["PhoneInput.useCallback[processInput]"]);
+            } else if (key === "confirm" || key === "Enter") {
+                if (phone.length >= 10) {
+                    onComplete(phone);
+                }
+            } else {
+                // Apenas adiciona se for número e menor que 11 dígitos
+                if (phone.length < 11 && /^[0-9]$/.test(key)) {
+                    setPhone({
+                        "PhoneInput.useCallback[processInput]": (prev)=>prev + key
+                    }["PhoneInput.useCallback[processInput]"]);
+                }
             }
         }
-    };
+    }["PhoneInput.useCallback[processInput]"], [
+        phone,
+        onComplete
+    ]);
+    // OUVINTE DO TECLADO FÍSICO (CONTROLE DA TV)
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "PhoneInput.useEffect": ()=>{
+            const handleKeyDown = {
+                "PhoneInput.useEffect.handleKeyDown": (e)=>{
+                    // Mapeia as teclas do controle
+                    if (/^[0-9]$/.test(e.key)) {
+                        processInput(e.key);
+                    } else if (e.key === "Backspace" || e.key === "Delete") {
+                        // Alguns controles enviam Backspace
+                        processInput("backspace");
+                    } else if (e.key === "Enter") {
+                        processInput("confirm");
+                    }
+                }
+            }["PhoneInput.useEffect.handleKeyDown"];
+            window.addEventListener("keydown", handleKeyDown);
+            return ({
+                "PhoneInput.useEffect": ()=>window.removeEventListener("keydown", handleKeyDown)
+            })["PhoneInput.useEffect"];
+        }
+    }["PhoneInput.useEffect"], [
+        processInput
+    ]);
     const formattedPhone = phone.replace(/\D/g, "").replace(/^(\d{2})(\d)/g, "($1) $2").replace(/(\d)(\d{4})$/, "$1-$2");
     const keys = [
         {
@@ -690,7 +733,7 @@ function PhoneInput({ onComplete }) {
                 className: "w-10 h-10"
             }, void 0, false, {
                 fileName: "[project]/components/phone-input.tsx",
-                lineNumber: 47,
+                lineNumber: 70,
                 columnNumber: 14
             }, this),
             value: "backspace",
@@ -705,7 +748,7 @@ function PhoneInput({ onComplete }) {
                 className: "w-10 h-10"
             }, void 0, false, {
                 fileName: "[project]/components/phone-input.tsx",
-                lineNumber: 53,
+                lineNumber: 76,
                 columnNumber: 14
             }, this),
             value: "confirm",
@@ -716,41 +759,30 @@ function PhoneInput({ onComplete }) {
         className: "flex min-h-screen flex-col items-center justify-center p-8 animate-in zoom-in duration-300 pt-24",
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                className: "text-6xl font-black text-white mb-6 text-center drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)] uppercase",
+                className: "text-5xl font-black text-white mb-6 text-center drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)] uppercase",
                 children: "Último Passo!"
             }, void 0, false, {
                 fileName: "[project]/components/phone-input.tsx",
-                lineNumber: 62,
+                lineNumber: 85,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "bg-white p-6 rounded-2xl mb-10 shadow-xl",
+                className: "bg-white p-6 rounded-2xl mb-8 shadow-xl max-w-2xl text-center",
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                    className: "text-3xl text-[#431407] text-center font-bold",
-                    children: [
-                        "Digite seu WhatsApp para",
-                        " ",
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
-                            className: "text-[#FF6B00] underline decoration-4",
-                            children: "liberar seu prêmio"
-                        }, void 0, false, {
-                            fileName: "[project]/components/phone-input.tsx",
-                            lineNumber: 69,
-                            columnNumber: 11
-                        }, this)
-                    ]
-                }, void 0, true, {
+                    className: "text-2xl text-[#431407] font-bold",
+                    children: "Use o teclado do controle ou clique abaixo:"
+                }, void 0, false, {
                     fileName: "[project]/components/phone-input.tsx",
-                    lineNumber: 67,
+                    lineNumber: 90,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/phone-input.tsx",
-                lineNumber: 66,
+                lineNumber: 89,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "bg-[#FFF3E0] w-full max-w-lg h-28 rounded-3xl flex items-center justify-center mb-12 border-4 border-orange-300 shadow-inner",
+                className: "bg-[#FFF3E0] w-full max-w-lg h-28 rounded-3xl flex items-center justify-center mb-10 border-4 border-orange-300 shadow-inner",
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                     className: "text-6xl font-mono font-black text-[#431407] tracking-widest",
                     children: formattedPhone || /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -758,45 +790,43 @@ function PhoneInput({ onComplete }) {
                         children: "(__) ____-____"
                     }, void 0, false, {
                         fileName: "[project]/components/phone-input.tsx",
-                        lineNumber: 79,
+                        lineNumber: 99,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/phone-input.tsx",
-                    lineNumber: 77,
+                    lineNumber: 97,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/phone-input.tsx",
-                lineNumber: 76,
+                lineNumber: 96,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "grid grid-cols-3 gap-6",
+                className: "grid grid-cols-3 gap-4",
                 children: keys.map((k)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                        onClick: ()=>handlePress(k.value),
-                        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("w-32 h-32 rounded-3xl text-5xl font-black transition-all flex items-center justify-center border-4 border-transparent", // Estilo padrão das teclas numéricas: Fundo Branco, Texto Escuro
-                        k.value !== "confirm" && k.value !== "backspace" ? "bg-white text-[#431407] shadow-[0_8px_0_#FFCC80] hover:border-[#FF6B00] hover:text-[#FF6B00]" : "", k.color, "active:translate-y-2 active:shadow-none", // Foco de TV
-                        "focus-visible:scale-110 focus-visible:ring-[8px] focus-visible:ring-white focus-visible:border-[#FF6B00] focus-visible:z-10 focus-visible:outline-none"),
+                        onClick: ()=>processInput(k.value),
+                        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("w-28 h-24 rounded-2xl text-4xl font-black transition-all flex items-center justify-center border-b-8 border-transparent active:border-b-0 active:translate-y-2", k.value !== "confirm" && k.value !== "backspace" ? "bg-white text-[#431407] shadow-lg border-b-gray-200 hover:bg-orange-50 focus-visible:bg-yellow-300" : "", k.color, "focus-visible:scale-110 focus-visible:ring-4 focus-visible:ring-white focus-visible:outline-none"),
                         children: k.label
                     }, k.value, false, {
                         fileName: "[project]/components/phone-input.tsx",
-                        lineNumber: 87,
+                        lineNumber: 107,
                         columnNumber: 11
                     }, this))
             }, void 0, false, {
                 fileName: "[project]/components/phone-input.tsx",
-                lineNumber: 85,
+                lineNumber: 105,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/phone-input.tsx",
-        lineNumber: 61,
+        lineNumber: 84,
         columnNumber: 5
     }, this);
 }
-_s(PhoneInput, "Rh3uEiqewCp0E8HPHmYE4vPaDg8=");
+_s(PhoneInput, "zao9u24UX9Qkn/NRXgMdhu+1XQ8=");
 _c = PhoneInput;
 var _c;
 __turbopack_context__.k.register(_c, "PhoneInput");

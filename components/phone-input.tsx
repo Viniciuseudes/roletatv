@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import { Delete, Check } from "lucide-react";
 import { playSound } from "@/lib/sounds";
@@ -12,21 +12,44 @@ interface PhoneInputProps {
 export function PhoneInput({ onComplete }: PhoneInputProps) {
   const [phone, setPhone] = useState("");
 
-  const handlePress = (key: string) => {
-    playSound("click"); // Som ao digitar
+  // Função centralizada de processar inputs
+  const processInput = useCallback(
+    (key: string) => {
+      playSound("click");
 
-    if (key === "backspace") {
-      setPhone((prev) => prev.slice(0, -1));
-    } else if (key === "confirm") {
-      if (phone.length >= 10) {
-        onComplete(phone);
+      if (key === "backspace") {
+        setPhone((prev) => prev.slice(0, -1));
+      } else if (key === "confirm" || key === "Enter") {
+        if (phone.length >= 10) {
+          onComplete(phone);
+        }
+      } else {
+        // Apenas adiciona se for número e menor que 11 dígitos
+        if (phone.length < 11 && /^[0-9]$/.test(key)) {
+          setPhone((prev) => prev + key);
+        }
       }
-    } else {
-      if (phone.length < 11) {
-        setPhone((prev) => prev + key);
+    },
+    [phone, onComplete]
+  );
+
+  // OUVINTE DO TECLADO FÍSICO (CONTROLE DA TV)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Mapeia as teclas do controle
+      if (/^[0-9]$/.test(e.key)) {
+        processInput(e.key);
+      } else if (e.key === "Backspace" || e.key === "Delete") {
+        // Alguns controles enviam Backspace
+        processInput("backspace");
+      } else if (e.key === "Enter") {
+        processInput("confirm");
       }
-    }
-  };
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [processInput]);
 
   const formattedPhone = phone
     .replace(/\D/g, "")
@@ -59,21 +82,18 @@ export function PhoneInput({ onComplete }: PhoneInputProps) {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center p-8 animate-in zoom-in duration-300 pt-24">
-      <h2 className="text-6xl font-black text-white mb-6 text-center drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)] uppercase">
+      <h2 className="text-5xl font-black text-white mb-6 text-center drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)] uppercase">
         Último Passo!
       </h2>
-      {/* Cartão de Instrução Branco para Contraste */}
-      <div className="bg-white p-6 rounded-2xl mb-10 shadow-xl">
-        <p className="text-3xl text-[#431407] text-center font-bold">
-          Digite seu WhatsApp para{" "}
-          <strong className="text-[#FF6B00] underline decoration-4">
-            liberar seu prêmio
-          </strong>
+
+      <div className="bg-white p-6 rounded-2xl mb-8 shadow-xl max-w-2xl text-center">
+        <p className="text-2xl text-[#431407] font-bold">
+          Use o teclado do controle ou clique abaixo:
         </p>
       </div>
 
-      {/* Visor do Número (Fundo Branco, Texto Escuro) */}
-      <div className="bg-[#FFF3E0] w-full max-w-lg h-28 rounded-3xl flex items-center justify-center mb-12 border-4 border-orange-300 shadow-inner">
+      {/* Visor do Número */}
+      <div className="bg-[#FFF3E0] w-full max-w-lg h-28 rounded-3xl flex items-center justify-center mb-10 border-4 border-orange-300 shadow-inner">
         <span className="text-6xl font-mono font-black text-[#431407] tracking-widest">
           {formattedPhone || (
             <span className="text-orange-300/50">(__) ____-____</span>
@@ -81,22 +101,19 @@ export function PhoneInput({ onComplete }: PhoneInputProps) {
         </span>
       </div>
 
-      {/* Teclado Numérico */}
-      <div className="grid grid-cols-3 gap-6">
+      {/* Teclado Virtual (Para quem não quer usar o numérico físico) */}
+      <div className="grid grid-cols-3 gap-4">
         {keys.map((k) => (
           <button
             key={k.value}
-            onClick={() => handlePress(k.value)}
+            onClick={() => processInput(k.value)}
             className={cn(
-              "w-32 h-32 rounded-3xl text-5xl font-black transition-all flex items-center justify-center border-4 border-transparent",
-              // Estilo padrão das teclas numéricas: Fundo Branco, Texto Escuro
+              "w-28 h-24 rounded-2xl text-4xl font-black transition-all flex items-center justify-center border-b-8 border-transparent active:border-b-0 active:translate-y-2",
               k.value !== "confirm" && k.value !== "backspace"
-                ? "bg-white text-[#431407] shadow-[0_8px_0_#FFCC80] hover:border-[#FF6B00] hover:text-[#FF6B00]"
+                ? "bg-white text-[#431407] shadow-lg border-b-gray-200 hover:bg-orange-50 focus-visible:bg-yellow-300"
                 : "",
-              k.color, // Aplica cores específicas para backspace/confirm
-              "active:translate-y-2 active:shadow-none",
-              // Foco de TV
-              "focus-visible:scale-110 focus-visible:ring-[8px] focus-visible:ring-white focus-visible:border-[#FF6B00] focus-visible:z-10 focus-visible:outline-none"
+              k.color,
+              "focus-visible:scale-110 focus-visible:ring-4 focus-visible:ring-white focus-visible:outline-none"
             )}
           >
             {k.label}
